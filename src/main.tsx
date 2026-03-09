@@ -5,7 +5,7 @@ import Home from './screens/Home.tsx';
 import DispatchTile from './screens/DispatchTile.tsx';
 
 createRoot(document.getElementById('root')!).render(
-  <BrowserRouter>
+  <BrowserRouter basename="/warehouse_react_vite">
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/dispatch" element={<DispatchTile />} />
