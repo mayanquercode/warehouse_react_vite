@@ -7,6 +7,7 @@ export default function Home() {
         <section>
             <div>
                 <Button onClick={() => navigate('/dispatch')} variant="contained" >Despachar ceramica</Button>
+                <Button onClick={() => navigate('/kardex')} variant="contained" >Kardex</Button>
             </div>
         </section>
     )
