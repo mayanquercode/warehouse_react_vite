@@ -11,13 +11,13 @@ export default function Header() {
                         LA CASA DE LA CERÁMICA
                     </Typography>
                     <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 'bold', fontSize: '0.65rem' }}>
-                        BODEGA MATRIZ
+                        BODEGA QUININDE
                     </Typography>
                 </Box>
             </Box>
             <Chip
                 icon={<MapIcon sx={{ fontSize: '14px !important' }} />}
-                label="Quininde"
+                label="Administrador"
                 size="small"
                 color="success"
                 variant="outlined"
