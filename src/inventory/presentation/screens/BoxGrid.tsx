@@ -1,4 +1,4 @@
-import { Grid, type GridWrap } from "@mui/material"
+import { Grid } from "@mui/material"
 import type { GridProps } from "@mui/material"
 import { Children } from "react"
 

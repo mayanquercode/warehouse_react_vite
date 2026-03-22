@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import {
   Box,
   Container,
@@ -20,35 +20,10 @@ import {
   ReportProblem as WarningIcon,
   AccountCircle as UserIcon,
 } from '@mui/icons-material';
-import { styled } from '@mui/material/styles';
 import Header from "../components/Header";
 import { databaseProducts } from "../data/products"
 
 
-const GUIA_DATA = [
-  {
-    id: 'CERAPISOCOMA173',
-    cantidad: 48,
-    producto: "CERAMICA DE PISO GALAXY 57X57 CJ 2.30",
-    factor: "2.36",
-    medida: "58x58",
-    metros: 111.36
-  },
-  { id: 2, cantidad: 48, producto: "3843", factor: "2.36", medida: "58x58", metros: 111.36 },
-  { id: 3, cantidad: 24, producto: "7793", factor: "2.36", medida: "58x58", metros: 55.68 },
-  { id: 4, cantidad: 24, producto: "7746", factor: "2.36", medida: "58x58", metros: 55.68 },
-  { id: 5, cantidad: 48, producto: "1780", factor: "2.36", medida: "58x58", metros: 111.36 },
-  { id: 6, cantidad: 24, producto: "3841", factor: "2.36", medida: "58x58", metros: 55.68 },
-  { id: 7, cantidad: 35, producto: "1861", factor: "2.36", medida: "58x58", metros: 82.60 },
-  { id: 8, cantidad: 48, producto: "5793", factor: "2.36", medida: "58x58", metros: 111.36 },
-  { id: 9, cantidad: 24, producto: "1753", factor: "2.36", medida: "58x58", metros: 55.68 },
-  { id: 10, cantidad: 31, producto: "Allegro", factor: "2.50", medida: "50x50", metros: 77.50 },
-];
-
-const StyledCard = styled(Card)(({ theme }) => ({
-  borderBottom: '1px solid #f0f0f0',
-
-}));
 
 const KardexProduct = () => {
   const [navValue, setNavValue] = useState(0);
@@ -93,7 +68,7 @@ const KardexProduct = () => {
       <Fade in>
         <Box>
           {filteredData.map((item) => (
-            <StyledCard key={item.code} variant="outlined">
+            <Card key={item.code} variant="outlined">
 
               <CardContent>
                 <Typography variant="body2" sx={{ fontWeight: 400, color: 'text.primary' }}>{item.name}</Typography>
@@ -107,7 +82,7 @@ const KardexProduct = () => {
                   </Typography>
                 </Box>
               </CardContent>
-            </StyledCard>
+            </Card>
           ))}
         </Box>
       </Fade>
@@ -117,7 +92,7 @@ const KardexProduct = () => {
         <BottomNavigation
           showLabels
           value={navValue}
-          onChange={(event, newValue) => setNavValue(newValue)}
+          onChange={(_event, newValue) => setNavValue(newValue)}
           sx={{ height: 70 }}
         >
           <BottomNavigationAction label="GUÍA" icon={<InventoryIcon />} />
