@@ -2,16 +2,15 @@ import { useState, useMemo } from 'react';
 import {
   Box,
   Container,
-  Typography,
   TextField,
-  Card,
-  CardContent,
   AppBar,
   BottomNavigation,
   BottomNavigationAction,
   Paper,
   InputAdornment,
-  Fade
+  Fade,
+  Skeleton,
+  Grid
 } from '@mui/material';
 import {
   Search as SearchIcon,
@@ -21,20 +20,29 @@ import {
   AccountCircle as UserIcon,
 } from '@mui/icons-material';
 import Header from "../components/Header";
-import { databaseProducts } from "../data/products"
+import useQueryTileReport from '../hooks/tile-hooks';
+import CardHomeTileReport from '../components/CardHomeTileReport';
 
 
 
 const KardexProduct = () => {
+  // hooks to use tanstack/react-query 
+  const { data: tiles, isLoading } = useQueryTileReport()
+
   const [navValue, setNavValue] = useState(0);
   const [search, setSearch] = useState('');
 
   // Filtrado de datos por nombre de producto
   const filteredData = useMemo(() => {
-    return databaseProducts.filter(item =>
+    if (!tiles) return;
+
+
+    return tiles.filter(item =>
       item.name.toLowerCase().includes(search.toLowerCase())
     );
-  }, [search]);
+  }, [search, tiles]);
+
+
 
   // Cálculo de totales para la vista de resumen
 
@@ -65,27 +73,42 @@ const KardexProduct = () => {
         </Box>
       </AppBar>
 
+      {isLoading && (
+        <>
+          <Container sx={{ paddingTop: '10px' }}>
+            <Skeleton variant='rectangular' width={'35%'} height={20} sx={{ marginBottom: '5px' }} />
+            <Skeleton variant='rectangular' width={'100%'} height={20} sx={{ marginBottom: '5px' }} />
+            <Grid container spacing={2} mb={1}>
+              <Grid size={6}>
+                <Box borderRadius={2} overflow={'hidden'}>
+                  <Skeleton variant='rectangular' width={'100%'} height={100} />
+
+                </Box>
+              </Grid>
+              <Grid size={6}>
+                <Box borderRadius={2} overflow={'hidden'}>
+                  <Skeleton variant='rectangular' width={'100%'} height={100} />
+                </Box>
+              </Grid>
+            </Grid>
+            <Box borderRadius={2} overflow={'hidden'}>
+              <Skeleton variant='rectangular' width={'100%'} height={50} />
+            </Box>
+          </Container>
+        </>
+      )}
+
       <Fade in>
         <Box>
-          {filteredData.map((item) => (
-            <Card key={item.code} variant="outlined">
-
-              <CardContent>
-                <Typography variant="body2" sx={{ fontWeight: 400, color: 'text.primary' }}>{item.name}</Typography>
-                <Box>
-                  <Typography variant="caption" sx={{ fontWeight: 800, color: 'text.primary' }}>
-                    Stock:
-                  </Typography>
-
-                  <Typography variant="caption" sx={{ fontWeight: 200, color: 'text.primary' }}>
-                    {item.stock}m²
-                  </Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          ))}
+          {filteredData && (
+            filteredData.map(item => (
+              <CardHomeTileReport key={item.code} tile={item} />
+            ))
+          )}
         </Box>
       </Fade>
+
+
 
       {/* Navegación inferior persistente */}
       <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1000 }} elevation={10}>
