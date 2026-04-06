@@ -22,6 +22,7 @@ import {
 import Header from "../components/Header";
 import useQueryTileReport from '../hooks/tile-hooks';
 import CardHomeTileReport from '../components/CardHomeTileReport';
+import { supabase } from '../libs/supabase';
 
 
 
@@ -46,9 +47,19 @@ const KardexProduct = () => {
 
   // Cálculo de totales para la vista de resumen
 
+  const onClickSession = async () => {
+    const { error } = await supabase.auth.signOut()
+    console.log('cerrar sesion');
+    console.log(error);
+
+  }
+
   return (
     <Box sx={{ pb: 12, bgcolor: '#f8fafc', minHeight: '100vh' }}>
       {/* AppBar / Encabezado principal */}
+      <section className='p-4'>
+        <button onClick={onClickSession}>Cerrar seccion</button>
+      </section>
       <AppBar position="sticky" elevation={0} sx={{ bgcolor: 'white', borderBottom: '1px solid #eee' }}>
         <Header />
         <Box>
