@@ -1,39 +1,48 @@
-
-import React, { useEffect, useState } from 'react';
-import { Navigate } from 'react-router';
-import { supabase } from '../libs/supabase';
-import type { Session } from '@supabase/supabase-js';
+import React, { useEffect, useState } from "react";
+import { Navigate } from "react-router";
+import { supabase } from "../libs/supabase";
+import type { Session } from "@supabase/supabase-js";
 
 type Props = {
-  children: React.ReactElement | React.ReactElement[]
-  allowedRoles: string[]
-}
+  children: React.ReactElement | React.ReactElement[];
+  allowedRoles: string[];
+};
 
 export const ProtectedRoute = ({ children, allowedRoles }: Props) => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 1. Revisar si hay sesión activa
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
+    // 1. Obtener sesión inicial
+    supabase.auth.getSession().then(({ data }) => {
+      setSession(data.session);
       setLoading(false);
     });
+
+    // 2. Escuchar cambios en auth (CLAVE 🔥)
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setSession(session);
+      }
+    );
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
   }, []);
 
   if (loading) return <p>Cargando...</p>;
 
-  // 2. Si no hay sesión, mandar al Login
+  // 3. No hay sesión → login
   if (!session) {
     return <Navigate to="/login" replace />;
   }
 
-  // 3. Extraer el rol de los metadatos (el que pusimos con SQL)
-  const userRole = session.user.user_metadata.role;
+  // 4. Validar rol (seguro)
+  const userRole = session.user.user_metadata?.role;
 
-  // 4. Si el rol no está en la lista permitida, mandarlo a una página de error
-  if (allowedRoles && !allowedRoles.includes(userRole)) {
-    return <Navigate to="/login" replace />;
+  if (allowedRoles.length > 0 && !allowedRoles.includes(userRole)) {
+    return <Navigate to="/unauthorized" replace />;
   }
 
   return children;

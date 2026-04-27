@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   Box,
   Container,
@@ -22,12 +22,15 @@ import {
 import Header from "../components/Header";
 import useQueryTileReport from '../hooks/tile-hooks';
 import CardHomeTileReport from '../components/CardHomeTileReport';
-import { supabase } from '../libs/supabase';
 import { useAppSelector } from '../redux/hooks';
+import { useNavigate } from 'react-router';
 
 
 
 const KardexProduct = () => {
+
+  const navigate = useNavigate();
+
   // hooks to use tanstack/react-query 
   const { data: tiles, isLoading } = useQueryTileReport()
   const session = useAppSelector(state => state.session)
@@ -47,24 +50,36 @@ const KardexProduct = () => {
 
 
 
-  // Cálculo de totales para la vista de resumen
-  
-  console.log('sesion',session);
-  
+  // verifica session si no existe redirige a login
+  useEffect(() => {
+    if (!session) {
+      navigate('/login');
+    }
+  }, [session]);
 
-  const onClickSession = async () => {
-    const { error } = await supabase.auth.signOut()
-    console.log('cerrar sesion');
-    console.log(error);
-
+  // navega entre rutas de navegacion 
+  const handleNavigation = (value: number) => {
+    setNavValue(value);
+    switch (value) {
+      case 0:
+        navigate('/');
+        break;
+      case 1:
+        navigate('/bodega');
+        break;
+      case 2:
+        navigate('/crud-product');
+        break;
+      case 3:
+        navigate('/perfil');
+        break;
+    }
   }
+
 
   return (
     <Box sx={{ pb: 12, bgcolor: '#f8fafc', minHeight: '100vh' }}>
       {/* AppBar / Encabezado principal */}
-      <section className='p-4'>
-        <button onClick={onClickSession}>Cerrar seccion</button>
-      </section>
       <AppBar position="sticky" elevation={0} sx={{ bgcolor: 'white', borderBottom: '1px solid #eee' }}>
         <Header />
         <Box>
@@ -131,12 +146,12 @@ const KardexProduct = () => {
         <BottomNavigation
           showLabels
           value={navValue}
-          onChange={(_event, newValue) => setNavValue(newValue)}
+          onChange={(_event, newValue) => handleNavigation(newValue)}
           sx={{ height: 70 }}
         >
           <BottomNavigationAction label="GUÍA" icon={<InventoryIcon />} />
           <BottomNavigationAction label="BODEGA" icon={<TruckIcon />} />
-          <BottomNavigationAction label="MERMA" icon={<WarningIcon />} />
+          <BottomNavigationAction label="PRODUCTOS" icon={<WarningIcon />} />
           <BottomNavigationAction label="PERFIL" icon={<UserIcon />} />
         </BottomNavigation>
       </Paper>

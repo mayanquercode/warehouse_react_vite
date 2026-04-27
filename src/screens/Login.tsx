@@ -54,11 +54,6 @@ function Login() {
         }),
       );
 
-      console.log("Sesión guardada en Redux:", {
-        user: data.user,
-        session: data.session,
-      });
-
       // 3. Redirigir al home
       navigate("/", { replace: true });
     } catch (err) {
@@ -78,7 +73,7 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+    <div className="min-h-screen flex  items-center justify-center bg-gray-100 p-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
         {/* Header con Icono */}
         <div className="text-center mb-8">
@@ -159,9 +154,8 @@ function Login() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full flex justify-center items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors shadow-lg shadow-blue-200 ${
-              loading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+            className={`w-full flex justify-center items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors shadow-lg shadow-blue-200 ${loading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
           >
             <LoginOutlined sx={{ fontSize: 20 }} />
             {loading ? "Iniciando sesión..." : "Iniciar Sesión"}

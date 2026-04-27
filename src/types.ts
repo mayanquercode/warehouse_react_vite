@@ -10,3 +10,15 @@ export interface TileReport {
     missingQuantity: number;
     leftoverQuantity: number;
 }
+
+export interface Product {
+    name: string;
+    code: string;
+    category: string;
+    product_type: string;
+}
+
+export interface Category {
+    id: string;
+    name: string;
+}
