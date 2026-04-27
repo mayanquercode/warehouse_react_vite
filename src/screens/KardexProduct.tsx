@@ -23,12 +23,14 @@ import Header from "../components/Header";
 import useQueryTileReport from '../hooks/tile-hooks';
 import CardHomeTileReport from '../components/CardHomeTileReport';
 import { supabase } from '../libs/supabase';
+import { useAppSelector } from '../redux/hooks';
 
 
 
 const KardexProduct = () => {
   // hooks to use tanstack/react-query 
   const { data: tiles, isLoading } = useQueryTileReport()
+  const session = useAppSelector(state => state.session)
 
   const [navValue, setNavValue] = useState(0);
   const [search, setSearch] = useState('');
@@ -46,6 +48,9 @@ const KardexProduct = () => {
 
 
   // Cálculo de totales para la vista de resumen
+  
+  console.log('sesion',session);
+  
 
   const onClickSession = async () => {
     const { error } = await supabase.auth.signOut()
